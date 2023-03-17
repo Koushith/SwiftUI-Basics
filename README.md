@@ -1,4 +1,5 @@
-# SwiftUI-Basics
+# SwiftUI-Basics. -- Raw and unedited notes. ignore the typos and grammatical errors!!
+
 Playing around SwiftUI by exploring common components
 
 # SwiftUI Notes
