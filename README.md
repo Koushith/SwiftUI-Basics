@@ -390,5 +390,104 @@ if you want to use the state outside- use ```@published```
 just like @state alerts the view, @published alerts the class to look for changes.
 
 
+```The @Published attribute is class constrained. Use it with properties of classes, not with non-class types like structures.```
+
+initilize the class and use it.
+
+```swift!
+
+import SwiftUI
+
+
+struct FruitModel:Identifiable{
+    let id : String = UUID().uuidString
+    let name : String
+    let count : Int
+}
+
+
+
+class FruitsViewModel: ObservableObject {
+    
+    @Published var fruitArray : [FruitModel] = []
+    @Published var isLoading : Bool = false
+    
+    func getFruits(){
+        let fruit1 = FruitModel(name: "Apple", count: 5)
+        let fruit2 = FruitModel(name: "Apple", count: 5)
+        let fruit3 = FruitModel(name: "Apple", count: 5)
+        let fruit4 = FruitModel(name: "Apple", count: 5)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            self.isLoading = true
+            self.fruitArray.append(fruit2)
+            self.fruitArray.append(fruit1)
+            self.fruitArray.append(fruit3)
+            self.fruitArray.append(fruit4)
+            self.isLoading = false
+        }
+    }
+    
+    func Delete(index: IndexSet){
+        print(index)
+        fruitArray.remove(atOffsets: index)
+    }
+}
+
+
+
+struct ViewModel: View {
+    
+    @ObservedObject var fruitsViewModel : FruitsViewModel = FruitsViewModel() //initilizing the class
+    
+//    @State var fruitArray : [FruitModel] = []
+    
+ var body: some View {
+        
+        
+        NavigationView {
+            
+            List{
+                ForEach(fruitsViewModel.fruitArray) { fruit in
+                    
+                    if(fruitsViewModel.isLoading){
+                       ProgressView()
+                    }else{
+                        HStack{
+                            Text("\(fruit.count)").foregroundColor(.red)
+                            Text("\(fruit.name)").bold()
+                            
+                        }
+                    }
+                   
+                }.onDelete(perform: fruitsViewModel.Delete)
+            }
+        }
+        .listStyle(GroupedListStyle())
+        .navigationTitle("Fruits List")
+        .onAppear{
+            fruitsViewModel.getFruits()
+        }
+        
+    }
+    
+    
+}
+
+```
+
+- basically this is for code clean up- put any data logic outside and seperate the ui.
+
+- in views we use ```struct```  and local state are avaliable only on views- i.e struct.
+
+- in order to use the state variable outside and update the view based on this object -
+
+    -    Create a class which is ```obserableOjbct``` and declare thd state variable as ```@published```
+    -    initilize the class inside view and use it. while initilizing make use of ```@ObservedObject``` .
+    -    basically with this we are telling the class to watchout for changes and update the value accordingly.
+    -    note that- when ever something changes in the ui- it will update the whole class and data wont be persisted. 
+
+use ```@stateObject``` to persist the data. it is same as ```@observedObject``` in initilizer. 
+
+
 
 https://www.youtube.com/watch?v=ddr3E0l4gIQ&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=29
