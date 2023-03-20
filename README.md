@@ -1,7 +1,3 @@
-# SwiftUI-Basics. -- Raw and unedited notes. ignore the typos and grammatical errors!!
-
-Playing around SwiftUI by exploring common components
-
 # SwiftUI Notes
 
 - Future of IOS development. UIKit is pretty old.
@@ -38,7 +34,7 @@ kerning - letterspacing- just the naming difference
 
 ```
 
-```swift=
+```swift
 import SwiftUI
 
 struct TextView: View {
@@ -63,7 +59,7 @@ struct TextView_Previews: PreviewProvider {
 
 - Read the docs helps us to create any shapes like circles, rectangles or even custom
 
-```swift=
+```swift
 RoundedRectange().frame(x x)
 Circles - etc
 ```
@@ -72,7 +68,7 @@ Circles - etc
 
 - used with modifiers. 
 
-```swift=
+```swift
 .fill(Color.grey)
 ```
 
@@ -94,7 +90,7 @@ lets say we have multiple screens using same view, we want to add different fore
 
 kinda state and props concept.
 
-```swift=
+```swift
 import SwiftUI
 
 struct InitilizerView: View {
@@ -258,3 +254,141 @@ Button("Title"){
 }
 
 ```
+
+
+in above example- it is just a string. you can do more than that.
+
+```swift
+
+   Button(action:{
+                self.title = "Button 2 was Pressed"
+            },
+            label: {
+                Text("Press Button 2")
+            }
+        )
+```
+
+use modifiers to control the look and feel.
+
+
+### State
+
+- when you declare the variable with ```swift @state ``` , you are telling the view to watch out for changes.
+
+if this variable changes, we might need to update the view.
+
+```swift
+
+import SwiftUI
+
+struct ButtonView: View {
+    
+   @State var title: String = "This is my Title" //this is the state variable and we are telling View to watch out for changes
+    
+    var body: some View {
+        VStack{
+            Text(title)
+           
+            
+            Button("Press Me"){
+              // you can create a seperate function and 
+                self.title = "Button was pressed"
+            }
+            
+            Button(action:{
+                self.title = "Button 2 was Pressed"
+            },
+            label: {
+                Text("Press Button 2")
+            }
+            )
+
+        }
+    }
+}
+```
+
+you can also do this for views.
+
+
+#### @binding property
+
+- This is used to connect a state variable from parent view to child view.
+
+aka- state is declared somewhere else and we are connecting it. 
+
+```swift!
+import SwiftUI
+
+struct BindingExample: View {
+    
+    // state variabe- if we dont initilize we have to pass the value just like passing porps in react
+    @State var backgroundColor : Color = Color.red
+    
+    var body: some View {
+        
+        ZStack{
+            backgroundColor.edgesIgnoringSafeArea(.all)
+            ExtractedButtonView(backgroundColor:  $backgroundColor)  //we are passing the binding reference
+            
+        }
+    }
+}
+
+
+
+struct ExtractedButtonView: View {
+    //this will bind to parents background color
+    @Binding  var backgroundColor : Color
+    
+    var body: some View {
+        Button(action:{
+            self.backgroundColor = Color.green;
+        }, label:{
+            Text("Hello")
+        }
+        ).background(.blue)
+            .foregroundColor(.white)
+            .padding()
+            .padding(.horizontal)
+            .background(.blue)
+            .cornerRadius(10)
+    }
+}
+
+```
+
+- concept is very simple. state variable is declared in parent component and you are passing a state variable as a binding to child view. here you use ```@bind``` 
+
+this variabe is binding to state variable declared in the parent view.
+
+we have ```.toggle()``` function abalible on boolean variables.
+
+
+### .sheets() && .fullScreenSheets() - refer docs.
+
+
+
+
+
+### @stateObjects and @observeableObjects()
+
+
+#### List 
+- list has few handy methods such as ```onLoad()``` ```onDelete``` , native swipe options
+
+read about onAppear and onDisappear.
+
+
+note while crateing a view you are using ```struct```
+
+you can use @state only inside view. i.e struct.
+
+if you want to use the state outside- use ```@published```
+
+just like @state alerts the view, @published alerts the class to look for changes.
+
+
+
+https://www.youtube.com/watch?v=ddr3E0l4gIQ&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=29
