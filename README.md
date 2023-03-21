@@ -489,5 +489,26 @@ struct ViewModel: View {
 use ```@stateObject``` to persist the data. it is same as ```@observedObject``` in initilizer. 
 
 
+Stateobject -- to persist data
+obesterved object- wont persist the data while rerendering.
+
+
+
+### environment object -> kinda global state 
+- in above example we are passing data from screen to screen. but here we are defining it in global level and we can access it anywhere in the app. 
+
+basically a prop drilling issue in reacts context.
+
+refer docs
+
+
+#### @AppStorage- kind of local storage
+#### @AsyncImage - load image from internet- url loading.
+#### @focused - just like useref for focus
+
+- use case - focus text field and popup keyboard.
+
+
+
 
 https://www.youtube.com/watch?v=ddr3E0l4gIQ&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=29
