@@ -510,5 +510,100 @@ refer docs
 
 
 
+#### Haptics aka vibrations
 
-https://www.youtube.com/watch?v=ddr3E0l4gIQ&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=29
+instanciate with static keyword .
+
+```HapticsManager()``` takes care of everything
+
+static keywords can accessed without instanciating.
+
+
+
+#### identiable and hashable -
+
+- while using for each loop we need to add an id. by default arrays -string array, we use .self. --> basically this hashes the string and produce unique id.
+
+
+
+
+### CoreData - kind of mini data base in phone that can be used to persist the data. more of a local storage
+
+
+
+### Encodealbe, Decodable and Codable
+
+when you download a data from internet, most of the time its raw and we cant use it directly. we need to either encode or decode the data into the data structure we have in our app.
+
+kind of ```json.parse() and json.stringify()``` and making it accordng to the interface we defined.
+
+
+
+##### Codeable
+
+- when you dowload omething from internet-> raw json has to be parsed to something usable. you cant directly use it on app.
+
+
+if you log the raw data, it shows in bytes, we need to decode it.
+
+
+```swift 
+
+//this is main-> Decodable, encoadable protocol
+struct CustomerModel : Identifiable, Decodable, Encodable  {
+    let id : String
+    let name : String
+    let point : Int
+    let isPremium : Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case point
+        case isPremium
+    }
+    
+
+    
+}
+
+
+class CodeableViewModle : ObservableObject {
+    //just like state- > this alerts class to watchout for changes
+    @Published var customer : CustomerModel? = nil
+    
+    init(){
+        getData()
+    }
+    
+    func getData(){
+        
+       guard let data = getJSONData() else {return}
+    
+        self.customer = try? JSONDecoder().decode(CustomerModel.self, from: data)
+        
+        
+    }
+    
+    //simulate downloading from internet
+    func getJSONData()->Data?{
+       
+        let newCustomer = CustomerModel(id:"123", name: "koush", point: 5, isPremium: true)
+        
+        let jsonData = try? JSONEncoder().encode(newCustomer)
+        
+        return jsonData
+        
+    }
+    
+    
+    
+ 
+}
+
+```
+
+https://www.youtube.com/watch?v=mG9BVAs8AIo&list=PLwvDm4VfkdpiagxAXCT33Rkwnc5IVhTar&index=12
+
+
+https://www.youtube.com/watch?v=ddr3E0l4gIQ&list=PLwvDm4VfkdphqETTBf-DdjCoAvhai1QpO&index=29 
